@@ -1,0 +1,78 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.calendar-container {
+    width: 300px;
+    position: relative;
+}
+
+.flatpickr-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.slots {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.slot {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #e0e0e0;
+}
+
+.slot.selected {
+    background-color: #5e35b1;
+    color: white;
+}
+
+.slot.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.slot:hover:not(.disabled) {
+    background-color: #d1c4e9;
+}
+
+.book-now {
+    width: 100%;
+    padding: 10px;
+    background-color: #5e35b1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.book-now:hover:not(:disabled) {
+    background-color: #4a148c;
+}
+
+.book-now:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

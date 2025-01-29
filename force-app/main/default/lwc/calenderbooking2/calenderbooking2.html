@@ -1,0 +1,23 @@
+<template>
+    <div class="container">
+        <!-- Calendar Section -->
+        <div class="calendar-container">
+            <input type="text" class="flatpickr-input" placeholder="Select a meeting date" />
+        </div>
+
+        <!-- Available Slots Section -->
+        <div class="slots">
+            <h3>Available Slots</h3>
+            <div class="slots-grid">
+                <template for:each={timeSlots} for:item="slot">
+                    <div key={slot.id} class="slot 
+                            {slot.isSelected ? 'selected' : ''} 
+                            {slot.isBooked ? 'disabled' : ''}" onclick={handleSlotClick} data-id={slot.id}>
+                        {slot.time}
+                    </div>
+                </template>
+            </div>
+            <button class="book-now" onclick={handleBookNow} disabled={isSlotSelected}>Book Now</button>
+        </div>
+    </div>
+</template>
