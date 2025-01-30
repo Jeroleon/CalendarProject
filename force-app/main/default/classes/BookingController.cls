@@ -14,7 +14,12 @@ public with sharing class BookingController {
     }
 
     @AuraEnabled
-    public static List<Book_Apt__c> getBookings() {
-        return [SELECT Date__c, Time__c, Slot_Id__c FROM Book_Apt__c];
+    public static List<Book_Apt__c> getBookings(String selectedDate) {
+        Date bookingdate = Date.valueOf(selectedDate);  
+		System.debug('Date Value: ' + bookingdate);
+        List<Book_Apt__c> bookedSlots = [SELECT Date__c, Time__c, Slot_Id__c FROM Book_Apt__c where Date__c =:bookingdate];
+        
+        System.debug('Book_Apt__c Value: ' + bookedSlots);
+        return bookedSlots;
     }
 }

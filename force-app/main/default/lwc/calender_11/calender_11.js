@@ -57,6 +57,7 @@ export default class CalendarBooking extends LightningElement {
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             this.selectedDate = `${year}-${month}-${day}`;
+            this.fetchBookings();
         } else {
             this.selectedDate = '';
         }
@@ -81,10 +82,10 @@ export default class CalendarBooking extends LightningElement {
     }
 
     get isBookNowDisabled() {
-    // Check if any slot is selected
-    return !this.timeSlots.some((slot) => slot.isSelected);
-}
-
+        // Check if any slot is selected
+        return !this.timeSlots.some((slot) => slot.isSelected);
+    }
+    
 
     handleBookNow() {
         if (!this.selectedDate) {
@@ -103,20 +104,13 @@ export default class CalendarBooking extends LightningElement {
         }
         console.log('Selected Slot:', selectedSlot);
 
-        // Save the booking in Salesforce                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-        const bookingData = {
-            Date__c: this.selectedDate,
-            Time__c: selectedSlot.time,
-            Slot_Id__c: selectedSlot.id
-        };
+        let selectedSlotTime = selectedSlot.time;
+        let selectedSlotId = selectedSlot.id;
 
-        saveBookingDetails({ booking: bookingData })
+        saveBookingDetails({selectedDate : this.selectedDate, selectedTime : selectedSlotTime, slotId : selectedSlotId})
             .then(() => {
-                alert(`Booking Confirmed!\nDate: ${this.selectedDate}\nTime: ${selectedSlot.time}`);
-                selectedSlot.isBooked = true;
-                this.timeSlots = this.timeSlots.map((slot) =>
-                    slot.id === selectedSlot.id ? { ...slot, isBooked: true, isSelected: false } : slot
-                );
+                alert(`Booking Confirmed!\nDate: ${this.selectedDate}\nTime: ${selectedSlotTime}`);
+                this.timeSlots = this.timeSlots.filter((slot) => slot.id !== selectedSlotId);
             })
             .catch((error) => {
                 console.error('Error saving booking:', error);
@@ -129,13 +123,12 @@ export default class CalendarBooking extends LightningElement {
     }
 
     fetchBookings() {
-        getBookings()
+        getBookings({ selectedDate: this.selectedDate })
             .then((bookings) => {
+                console.log('Bookings:', bookings);
                 const bookedSlots = bookings.map((booking) => booking.Slot_Id__c);
-                this.timeSlots = this.timeSlots.map((slot) => ({
-                    ...slot,
-                    isBooked: bookedSlots.includes(slot.id)
-                }));
+                this.timeSlots = this.timeSlots.filter((slot) => !bookedSlots.includes(slot.id));
+                
             })
             .catch((error) => {
                 console.error('Error fetching bookings:', error);

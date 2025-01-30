@@ -13,7 +13,7 @@ describe('c-calender-11', () => {
         // Arrange
         const element = createElement('c-calender-11', {
             is: Calender_11
-        });
+        }); 
 
         // Act
         document.body.appendChild(element);
